@@ -5,6 +5,7 @@ import {
     CircularProgress,
     Divider,
 } from "@material-ui/core";
+import Comments from "./Comments";
 import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
 import useStyles from "./styles";
@@ -88,12 +89,9 @@ const PostDetails = () => {
                         {moment(post.createdAt).fromNow()}
                     </Typography>
                     <Divider style={{ margin: "20px 0" }} />
-                    <Typography variant="body1">
-                        <strong>Realtime Chat - coming soon!</strong>
-                    </Typography>
+
+                    <Comments post={post} />
                     <Divider style={{ margin: "20px 0" }} />
-                    {/* <CommentSection post={post} /> */}
-                    {/* <Divider style={{ margin: "20px 0" }} /> */}
                 </div>
                 <div className={classes.imageSection}>
                     <img

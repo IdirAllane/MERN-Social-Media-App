@@ -1,6 +1,7 @@
 import {
     FETCH_ALL,
     CREATE,
+    COMMENT,
     DELETE,
     UPDATE,
     FETCH_BY_SEARCH,
@@ -44,6 +45,13 @@ export default (state = { isLoading: true, posts: [], post: [] }, action) => {
             return { ...state, posts: action.payload };
         case FETCH_POST:
             return { ...state, post: action.payload };
+        case COMMENT:
+            return {
+                ...state,
+                posts: state.posts.map((post) =>
+                    post._id === action.payload._id ? action.payload : post
+                ),
+            };
         default:
             return state;
     }
