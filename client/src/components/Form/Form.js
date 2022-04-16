@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { TextField, Button, Typography, Paper } from "@material-ui/core";
-import FileBase from "react-file-base64";
+import {
+    TextField,
+    Button,
+    Typography,
+    Paper,
+    Input,
+    Avatar,
+} from "@material-ui/core";
 import { useDispatch, useSelector } from "react-redux";
 import useStyles from "./styles";
 import { createPost, updatePost } from "../../actions/posts";
@@ -16,6 +22,7 @@ const Form = ({ currentId, setCurrentId }) => {
         tags: "",
         selectedFile: "",
     });
+    const [uploadPreview, setUploadPreview] = useState({ title: "", img: "" });
     const user = JSON.parse(localStorage.getItem("profile"));
     const post = useSelector((state) =>
         currentId ? state.posts.find((p) => p._id === currentId) : null
@@ -50,8 +57,32 @@ const Form = ({ currentId, setCurrentId }) => {
             tags: "",
             selectedFile: "",
         });
+        setUploadPreview({ title: "", img: "" });
     };
 
+    const handleUpload = async ({ target }) => {
+        const imgBase64 = await base64converter(target.files[0]);
+        setPostData({
+            ...postData,
+            selectedFile: imgBase64,
+        });
+        setUploadPreview({ title: target.files[0].name, img: imgBase64 });
+    };
+
+    const base64converter = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+            fileReader.onerror = (e) => {
+                reject(e);
+            };
+        });
+    };
+    console.log(postData);
     if (!user?.result?.name) {
         return (
             <Paper className={classes.paper} elevation={6}>
@@ -118,16 +149,45 @@ const Form = ({ currentId, setCurrentId }) => {
                         }
                     />
                     <div className={classes.fileInput}>
-                        <FileBase
+                        <input
+                            accept="image/*"
+                            id="contained-button-file"
+                            multiple
                             type="file"
-                            multiple={false}
-                            onDone={({ base64 }) =>
-                                setPostData({
-                                    ...postData,
-                                    selectedFile: base64,
-                                })
-                            }
+                            style={{ display: "none" }}
+                            onChange={(e) => handleUpload(e)}
                         />
+                        <label
+                            htmlFor="contained-button-file"
+                            style={{ width: "100%" }}
+                        >
+                            <Button
+                                variant="contained"
+                                component="span"
+                                fullWidth
+                                size="small"
+                                color="default"
+                                style={{ marginBottom: "5px" }}
+                            >
+                                select a memory
+                            </Button>
+                        </label>
+                        <Typography variant="body2" gutterBottom align="center">
+                            {uploadPreview.title
+                                ? uploadPreview.title
+                                : "no image selected"}
+                        </Typography>
+                        {uploadPreview.img && (
+                            <Avatar
+                                variant="square"
+                                src={uploadPreview?.img}
+                                style={{
+                                    height: "50%",
+                                    width: "75%",
+                                    marginBottom: "5px",
+                                }}
+                            />
+                        )}
                         <Button
                             className={classes.buttonSubmit}
                             variant="contained"
