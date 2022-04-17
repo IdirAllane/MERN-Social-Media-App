@@ -9,16 +9,20 @@ export default makeStyles((theme) => ({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        padding: "10px 50px",
+        padding: "10px 30px",
         [theme.breakpoints.down("sm")]: {
             flexDirection: "column",
+            padding: "10px 15px",
         },
     },
     heading: {
         color: theme.palette.primary.main,
         textDecoration: "none",
-        fontSize: "2em",
-        fontWeight: 300,
+        fontSize: "2.4rem",
+        fontWeight: 600,
+        [theme.breakpoints.down("sm")]: {
+            display: "none",
+        },
     },
     image: {
         marginLeft: "10px",
@@ -34,13 +38,13 @@ export default makeStyles((theme) => ({
     },
     profile: {
         display: "flex",
-        justifyContent: "space-between",
+        columnGap: "10px",
+        justifyContent: "flex-end",
         width: "400px",
         alignItems: "center",
         [theme.breakpoints.down("sm")]: {
             width: "auto",
-            marginTop: 20,
-            justifyContent: "center",
+            justifyContent: "space-between",
         },
     },
     logout: {
@@ -50,6 +54,9 @@ export default makeStyles((theme) => ({
         display: "flex",
         alignItems: "center",
         textAlign: "center",
+        [theme.breakpoints.down("xs")]: {
+            display: "none",
+        },
     },
     brandContainer: {
         display: "flex",

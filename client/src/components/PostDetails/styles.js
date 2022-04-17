@@ -1,36 +1,52 @@
 import { makeStyles } from "@material-ui/core/styles";
 
 export default makeStyles((theme) => ({
+    title: {
+        [theme.breakpoints.down("sm")]: {
+            fontSize: "2rem",
+        },
+    },
     media: {
         borderRadius: "20px",
         objectFit: "cover",
         width: "100%",
-        maxHeight: "600px",
+        [theme.breakpoints.down("sm")]: {
+            maxHeight: "350px",
+        },
     },
     card: {
         display: "flex",
         width: "100%",
+        gap: "20px",
         [theme.breakpoints.down("sm")]: {
             flexWrap: "wrap",
-            flexDirection: "column",
+            flexDirection: "column-reverse",
+            justifyContent: "space-between",
+            gap: "10px",
         },
     },
     section: {
         borderRadius: "20px",
+        width: "350px",
+        [theme.breakpoints.down("sm")]: {
+            width: "100%",
+        },
+    },
+    section2: {
+        borderRadius: "20px",
         margin: "10px",
-        flex: 1,
+        width: "100%",
     },
     imageSection: {
-        marginLeft: "20px",
+        flex: 1,
+        paddingLeft: "10px",
         [theme.breakpoints.down("sm")]: {
-            marginLeft: 0,
+            paddingLeft: 0,
         },
     },
     recommendedPosts: {
         display: "flex",
-        [theme.breakpoints.down("sm")]: {
-            flexDirection: "column",
-        },
+        flexWrap: "wrap",
     },
     loadingPaper: {
         display: "flex",
@@ -42,11 +58,32 @@ export default makeStyles((theme) => ({
     },
     commentsOuterContainer: {
         display: "flex",
+        flexDirection: "column",
         justifyContent: "space-between",
     },
     commentsInnerContainer: {
+        width: "350px",
         height: "200px",
         overflowY: "auto",
-        marginRight: "30px",
+        padding: "5px",
+        borderRadius: "0.5rem",
+        backgroundColor: "lightgray",
+        [theme.breakpoints.down("sm")]: {
+            width: "100%",
+            padding: 0,
+        },
+    },
+    singleComment: {
+        margin: "3px",
+        padding: "5px 10px",
+        backgroundColor: "white",
+        borderRadius: "5px",
+    },
+    button: {
+        marginTop: "10px",
+        width: "350px",
+        [theme.breakpoints.down("sm")]: {
+            width: "100%",
+        },
     },
 }));

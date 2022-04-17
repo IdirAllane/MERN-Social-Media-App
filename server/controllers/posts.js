@@ -3,7 +3,6 @@ import PostMessage from "../models/postMessage.js";
 
 export const getPost = async (req, res) => {
     const { id } = req.params;
-
     try {
         const post = await PostMessage.findById(id);
 
@@ -17,7 +16,7 @@ export const getPosts = async (req, res) => {
     const { page } = req.query;
     try {
         const LIMIT = 8;
-        const startIndex = (Number(page) - 1) * LIMIT; //get starting index of every page
+        const startIndex = (Number(page) - 1) * LIMIT;
         const total = await PostMessage.countDocuments({});
 
         const posts = await PostMessage.find()
@@ -36,14 +35,11 @@ export const getPosts = async (req, res) => {
 
 export const getPostsBySearch = async (req, res) => {
     const { searchQuery, tags } = req.query;
-
     try {
         const title = new RegExp(searchQuery, "i");
-
         const posts = await PostMessage.find({
             $or: [{ title }, { tags: { $in: tags.split(",") } }],
         });
-
         res.json({ data: posts });
     } catch (e) {
         res.status(404).json({ message: e });
@@ -68,7 +64,6 @@ export const createPost = async (req, res) => {
 export const updatePost = async (req, res) => {
     const { id: _id } = req.params;
     const post = req.body;
-
     if (!mongoose.Types.ObjectId.isValid(_id))
         return res.status(404).send("no post with that ID!");
 
@@ -100,8 +95,6 @@ export const likePost = async (req, res) => {
         return res.status(404).send("no post with that ID!");
 
     const post = await PostMessage.findById(id);
-
-    //check if user has already liked a post
     const index = post.likes.findIndex((id) => id === String(req.userId));
 
     if (index === -1) {

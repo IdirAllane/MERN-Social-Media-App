@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import {
     TextField,
     Button,
     Typography,
     Paper,
-    Input,
     Avatar,
 } from "@material-ui/core";
-import { useDispatch, useSelector } from "react-redux";
+
 import useStyles from "./styles";
 import { createPost, updatePost } from "../../actions/posts";
 
@@ -16,18 +16,18 @@ const Form = ({ currentId, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = JSON.parse(localStorage.getItem("profile"));
+    const [uploadPreview, setUploadPreview] = useState({ title: "", img: "" });
     const [postData, setPostData] = useState({
         title: "",
         message: "",
         tags: "",
         selectedFile: "",
     });
-    const [uploadPreview, setUploadPreview] = useState({ title: "", img: "" });
-    const user = JSON.parse(localStorage.getItem("profile"));
+
     const post = useSelector((state) =>
-        currentId ? state.posts.find((p) => p._id === currentId) : null
+        currentId ? state.posts.posts.find((p) => p._id === currentId) : null
     );
-    const posts = useSelector((state) => state.posts);
 
     useEffect(() => {
         if (post) {
@@ -82,7 +82,7 @@ const Form = ({ currentId, setCurrentId }) => {
             };
         });
     };
-    console.log(postData);
+
     if (!user?.result?.name) {
         return (
             <Paper className={classes.paper} elevation={6}>
@@ -104,7 +104,6 @@ const Form = ({ currentId, setCurrentId }) => {
                     onSubmit={handleSubmit}
                 >
                     <Typography variant="h6">
-                        {" "}
                         {currentId ? "Updating" : "Creating"} a Memory
                     </Typography>
                     <TextField

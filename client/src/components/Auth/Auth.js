@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { GoogleLogin } from "react-google-login";
 import {
     Avatar,
     Button,
@@ -7,14 +10,13 @@ import {
     Typography,
     Container,
 } from "@material-ui/core";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { GoogleLogin } from "react-google-login";
 import LockOutlined from "@material-ui/icons/LockOutlined";
+
+import { signIn, signUp } from "../../actions/auth";
 import useStyles from "./styles";
 import Input from "./Input";
 import Icon from "./Icon";
-import { signIn, signUp } from "../../actions/auth";
+
 const initialState = {
     first: "",
     last: "",
@@ -35,10 +37,8 @@ const Auth = () => {
         e.preventDefault();
 
         if (isSignUp) {
-            //sign up
             dispatch(signUp(formData, navigate));
         } else {
-            //sign in
             dispatch(signIn(formData, navigate));
         }
     };
@@ -65,6 +65,7 @@ const Auth = () => {
         console.log(err);
         console.log("Google sign in was unsuccessful! Try Again.");
     };
+
     return (
         <>
             <Container component="main" maxWidth="xs">
@@ -74,7 +75,7 @@ const Auth = () => {
                     </Avatar>
                     <Typography variant="h5">
                         {" "}
-                        {isSignUp ? "Sign Up" : "Sign In"}{" "}
+                        {isSignUp ? "Sign Up" : "Sign In"}
                     </Typography>
                     <form className={classes.form} onSubmit={handleSubmit}>
                         <Grid container spacing={2}>

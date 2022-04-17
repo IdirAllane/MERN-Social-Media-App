@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import moment from "moment";
+import ThumbUpAlt from "@material-ui/icons/ThumbUpAlt";
+import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
+import Delete from "@material-ui/icons/Delete";
+import MoreHoriz from "@material-ui/icons/MoreHoriz";
 import {
     Card,
     CardActions,
@@ -8,24 +15,17 @@ import {
     Typography,
     ButtonBase,
 } from "@material-ui/core";
-import ThumbUpAlt from "@material-ui/icons/ThumbUpAlt";
-import ThumbUpAltOutlined from "@material-ui/icons/ThumbUpAltOutlined";
-import MoreHoriz from "@material-ui/icons/MoreHoriz";
-import useStyles from "./styles";
-import moment from "moment";
-import Delete from "@material-ui/icons/Delete";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+
 import { deletePost, likePost } from "../../../actions/posts";
+import useStyles from "./styles";
 
 const Post = ({ post, setCurrentId }) => {
     const classes = useStyles();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [likes, setLikes] = useState(post?.likes);
     const user = JSON.parse(localStorage.getItem("profile"));
-
     const userId = user?.result?.googleId || user?.result?._id;
+    const [likes, setLikes] = useState(post?.likes);
     const hasLikedPost = likes.find((like) => like === userId);
 
     const openPost = () => {
@@ -84,9 +84,12 @@ const Post = ({ post, setCurrentId }) => {
                         user?.result?._id === post.creator) && (
                         <div className={classes.overlay2}>
                             <Button
-                                style={{ color: "white" }}
+                                style={{
+                                    color: "white",
+                                }}
                                 size="small"
-                                onClick={() => {
+                                onClick={(e) => {
+                                    e.stopPropagation();
                                     setCurrentId(post._id);
                                 }}
                             >
@@ -94,7 +97,6 @@ const Post = ({ post, setCurrentId }) => {
                             </Button>
                         </div>
                     )}
-
                     <div className={classes.details}>
                         <Typography variant="body2" color="textSecondary">
                             {post.tags.map((tag) => `#${tag} `)}
@@ -133,7 +135,7 @@ const Post = ({ post, setCurrentId }) => {
                         <Button
                             size="small"
                             variant="outlined"
-                            color="error"
+                            color="primary"
                             onClick={() => {
                                 dispatch(deletePost(post._id));
                             }}

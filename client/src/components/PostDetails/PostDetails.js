@@ -1,23 +1,26 @@
 import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import moment from "moment";
 import {
     Paper,
     Typography,
     CircularProgress,
     Divider,
 } from "@material-ui/core";
-import Comments from "./Comments";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
-import useStyles from "./styles";
-import { useParams, useNavigate, Link } from "react-router-dom";
+
 import { getPost, getPostsBySearch } from "../../actions/posts";
+import Comments from "./Comments";
+import useStyles from "./styles";
 
 const PostDetails = () => {
-    const { post, posts, isLoading } = useSelector((state) => state.posts);
+    const { id } = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const classes = useStyles();
-    const { id } = useParams();
+    const user = JSON.parse(localStorage.getItem("profile"));
+    const { post, posts, isLoading } = useSelector((state) => state.posts);
+    const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
 
     useEffect(() => {
         dispatch(getPost(id));
@@ -29,8 +32,6 @@ const PostDetails = () => {
                 getPostsBySearch({ search: "none", tags: post?.tags.join(",") })
             );
     }, [post, dispatch]);
-
-    const recommendedPosts = posts.filter(({ _id }) => _id !== post._id);
 
     const openPost = (_id) => {
         navigate(`/posts/${_id}`);
@@ -50,7 +51,11 @@ const PostDetails = () => {
         <Paper style={{ padding: "20px", borderRadius: "15px" }} elevation={6}>
             <div className={classes.card}>
                 <div className={classes.section}>
-                    <Typography variant="h3" component="h2">
+                    <Typography
+                        variant="h3"
+                        component="h2"
+                        className={classes.title}
+                    >
                         {post.title}
                     </Typography>
                     <Typography
@@ -76,21 +81,33 @@ const PostDetails = () => {
                     <Typography gutterBottom variant="body1" component="p">
                         {post.message}
                     </Typography>
-                    <Typography variant="h6">
+                    <Typography
+                        variant="h6"
+                        style={{ textDecoration: "none", color: "#3f51b5" }}
+                    >
                         Created by:
-                        <Link
-                            to={`/creators/${post.name}`}
-                            style={{ textDecoration: "none", color: "#3f51b5" }}
-                        >
-                            {` ${post.name}`}
-                        </Link>
+                        {` ${post.name}`}
                     </Typography>
                     <Typography variant="body1">
                         {moment(post.createdAt).fromNow()}
                     </Typography>
                     <Divider style={{ margin: "20px 0" }} />
-
+                    <Typography
+                        variant="h5"
+                        gutterBottom
+                        style={{ marginLeft: "5px" }}
+                    >
+                        Comments
+                    </Typography>
                     <Comments post={post} />
+                    {!user && (
+                        <Typography
+                            variant="body2"
+                            style={{ marginLeft: "5px" }}
+                        >
+                            Sign in to write a comment!
+                        </Typography>
+                    )}
                     <Divider style={{ margin: "20px 0" }} />
                 </div>
                 <div className={classes.imageSection}>
@@ -106,7 +123,7 @@ const PostDetails = () => {
             </div>
 
             {recommendedPosts.length && (
-                <div className={classes.section}>
+                <div className={classes.section2}>
                     <Typography gutterBottom variant="h5">
                         You might also like
                     </Typography>

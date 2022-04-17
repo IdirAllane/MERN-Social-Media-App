@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 import {
     Container,
     Grid,
@@ -10,11 +11,11 @@ import {
     Button,
 } from "@material-ui/core";
 import ChipInput from "material-ui-chip-input";
+
+import { getPostsBySearch } from "../../actions/posts";
 import Posts from "../Posts/Posts";
 import Form from "../Form/Form";
 import Paginate from "../Pagination/Pagination";
-import { useDispatch } from "react-redux";
-import { getPostsBySearch } from "../../actions/posts";
 import useStyles from "./styles";
 
 function useQuery() {
@@ -31,9 +32,6 @@ const Home = () => {
     const navigate = useNavigate();
     const page = query.get("page") || 1;
     const searchQuery = query.get("searchQuery");
-
-    console.log("page", page);
-    console.log("query", searchQuery);
 
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {

@@ -1,4 +1,5 @@
 import express from "express";
+import auth from "../middleware/auth.js";
 import {
     getPosts,
     createPost,
@@ -9,7 +10,6 @@ import {
     getPost,
     commentPost,
 } from "../controllers/posts.js";
-import auth from "../middleware/auth.js";
 
 const router = express.Router();
 
